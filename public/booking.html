@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=10, initial-scale=1.0">
+    <title>Booking & Appointments</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="booking-page">
+    <header class="page-header booking-header">
+        <h1>Booking & Appointments</h1>
+        <p>Book an appointment with ease and convenience.</p>
+    </header>
+    
+    <section class="feature-content">
+        <div class="feature-card">
+            <img src="https://www.apollohospitals.com/wp-content/themes/apollohospitals/assets-v3/images/bookappt_icon.svg" alt="Booking">
+            <p>Use our secure and easy appointment system to book a consultation with a doctor at a time that suits you best.</p>
+        </div>
+
+        <!-- Success/Error Message Container -->
+        <div id="message" class="message"></div>
+
+        <form id="bookingForm" class="feature-form">
+            <h2>Schedule an Appointment</h2>
+            <label for="patientId">Patient ID:</label>
+            <input type="number" id="patientId" name="patient_id" required>
+
+            <label for="doctorId">Doctor ID:</label>
+            <input type="number" id="doctorId" name="doctor_id" required>
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" required>
+
+            <button type="submit" class="submit-button">Book Appointment</button>
+        </form>
+    </section>
+
+    <script>
+        // Handle AJAX form submission
+        document.getElementById('bookingForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent form from submitting the traditional way
+            
+            // Collect form data
+            const patientId = document.getElementById('patientId').value;
+            const doctorId = document.getElementById('doctorId').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+
+            // Send form data using Fetch API
+            try {
+                const response = await fetch('/appointments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ patient_id: patientId, doctor_id: doctorId, date, time })
+                });
+
+                const messageDiv = document.getElementById('message');
+                if (response.ok) {
+                    messageDiv.textContent = 'Appointment booked successfully!';
+                    messageDiv.classList.add('success');
+                } else {
+                    messageDiv.textContent = 'Error: Unable to book appointment.';
+                    messageDiv.classList.add('error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('message').textContent = 'An error occurred. Please try again later.';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic Scheduling</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="diagnostics-page">
+    <header class="page-header diagnostics-header">
+        <h1>Diagnostic Scheduling</h1>
+        <p>Book and manage diagnostic tests with ease.</p>
+    </header>
+
+    <section class="feature-content">
+        <div class="feature-card">
+            <img src="https://www.apollohospitals.com/wp-content/themes/apollohospitals/assets-v2/images/bookhelathcheck_icon.svg"alt="Diagnostic Scheduling">
+            <p>Schedule diagnostic tests for patients at their convenience.</p>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <form id="diagnosticForm" class="feature-form">
+            <h2>Schedule a Diagnostic Test</h2>
+            <label for="patientId">Patient ID:</label>
+            <input type="number" id="patientId" name="patient_id" required>
+
+            <label for="test">Test Type:</label>
+            <input type="text" id="test" name="test" required>
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" required>
+
+            <button type="submit" class="submit-button">Schedule Test</button>
+        </form>
+    </section>
+
+    <script>
+        document.getElementById('diagnosticForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const patientId = document.getElementById('patientId').value;
+            const test = document.getElementById('test').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+
+            try {
+                const response = await fetch('/diagnostics', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ patient_id: patientId, test, date, time })
+                });
+
+                const messageDiv = document.getElementById('message');
+                if (response.ok) {
+                    messageDiv.textContent = 'Diagnostic test scheduled successfully!';
+                    messageDiv.classList.add('success');
+                } else {
+                    messageDiv.textContent = 'Error: Unable to schedule diagnostic test.';
+                    messageDiv.classList.add('error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('message').textContent = 'An error occurred. Please try again later.';
+            }
+        });
+    </script>
+</body>
+</html>

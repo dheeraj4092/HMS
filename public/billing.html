@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing & Payments</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="billing-page">
+    <header class="page-header billing-header">
+        <h1>Billing & Payments</h1>
+        <p>Efficient and secure billing and payment processing.</p>
+    </header>
+
+    <section class="feature-content">
+        <div class="feature-card">
+            <img src="https://www.apollohospitals.com/wp-content/themes/apollohospitals/assets-v2/images/ips_visa.svg" alt="Billing">
+            <p>Process payments and manage billing information quickly and securely.</p>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <form id="billingForm" class="feature-form">
+            <h2>Process Payment</h2>
+            <label for="patientId">Patient ID:</label>
+            <input type="number" id="patientId" name="patient_id" required>
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required>
+
+            <label for="status">Status (e.g., Paid, Pending):</label>
+            <input type="text" id="status" name="status" required>
+
+            <button type="submit" class="submit-button">Process Payment</button>
+        </form>
+    </section>
+
+    <script>
+        document.getElementById('billingForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const patientId = document.getElementById('patientId').value;
+            const amount = document.getElementById('amount').value;
+            const status = document.getElementById('status').value;
+
+            try {
+                const response = await fetch('/billing', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ patient_id: patientId, amount, status })
+                });
+
+                const messageDiv = document.getElementById('message');
+                if (response.ok) {
+                    messageDiv.textContent = 'Payment processed successfully!';
+                    messageDiv.classList.add('success');
+                } else {
+                    messageDiv.textContent = 'Error: Unable to process payment.';
+                    messageDiv.classList.add('error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('message').textContent = 'An error occurred. Please try again later.';
+            }
+        });
+    </script>
+</body>
+</html>

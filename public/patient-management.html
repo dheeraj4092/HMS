@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<!-- Patient Management HTML with AJAX -->
+<body class="patient-management-page">
+    <header class="page-header patient-management-header">
+        <h1>Patient Management</h1>
+        <p>Manage patient records securely and efficiently.</p>
+    </header>
+
+    <section class="feature-content">
+        <div class="feature-card">
+            <img src="https://www.apollohospitals.com/wp-content/themes/apollohospitals/assets-v2/images/finddoctor_icon.svg"  alt="Patient Management">
+            <p>Maintain accurate records of patient medical histories, treatments, and visits in one secure location.</p>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <form id="patientForm" class="feature-form">
+            <h2>Add New Patient</h2>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="contact">Contact Details:</label>
+            <input type="text" id="contact" name="contact_details" required>
+
+            <button type="submit" class="submit-button">Add Patient</button>
+        </form>
+    </section>
+
+    <script>
+        document.getElementById('patientForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const dob = document.getElementById('dob').value;
+            const address = document.getElementById('address').value;
+            const contact_details = document.getElementById('contact').value;
+
+            try {
+                const response = await fetch('/patients', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, dob, address, contact_details })
+                });
+
+                const messageDiv = document.getElementById('message');
+                if (response.ok) {
+                    messageDiv.textContent = 'Patient added successfully!';
+                    messageDiv.classList.add('success');
+                } else {
+                    messageDiv.textContent = 'Error: Unable to add patient.';
+                    messageDiv.classList.add('error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('message').textContent = 'An error occurred. Please try again later.';
+            }
+        });
+    </script>
+</body>
+
+</html>

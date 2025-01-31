@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Hospital Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Contact Us</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="features.html">Features</a>
+            <a href="architecture.html">System Architecture</a>
+            <a href="security.html">Security & Compliance</a>
+            <a href="user-guide.html">User Guide</a>
+            <a href="contact.html">Contact Us</a>
+        </nav>
+    </header>
+    <section>
+        <h2>Get in Touch</h2>
+        <form>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <label for="message">Message:</label>
+            <textarea id="message" name="message"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+    <!-- Example Form to Book Appointment -->
+<form id="appointmentForm">
+    <input type="text" id="patientId" placeholder="Patient ID">
+    <input type="text" id="doctorId" placeholder="Doctor ID">
+    <input type="date" id="date">
+    <input type="time" id="time">
+    <button type="submit">Book Appointment</button>
+</form>
+
+<script>
+    document.getElementById('appointmentForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const patientId = document.getElementById('patientId').value;
+        const doctorId = document.getElementById('doctorId').value;
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+
+        const response = await fetch('http://localhost:3000/appointments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ patient_id: patientId, doctor_id: doctorId, date, time })
+        });
+
+        const result = await response.json();
+        alert(result.message);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Tools</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="doctor-tools-page">
+    <header class="page-header doctor-tools-header">
+        <h1>Doctor Tools</h1>
+        <p>Manage doctor schedules and patient data efficiently.</p>
+    </header>
+
+    <section class="feature-content">
+        <div class="feature-card">
+            <img src="https://www.apollohospitals.com/wp-content/themes/apollohospitals/assets-v2/images/ips_doctor.svg"alt="Doctor Tools">
+            <p>Keep track of doctor schedules and manage patient records conveniently in one place.</p>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <form id="doctorForm" class="feature-form">
+            <h2>Update Doctor Information</h2>
+            <label for="doctorId">Doctor ID:</label>
+            <input type="number" id="doctorId" name="doctor_id" required>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="specialty">Specialty:</label>
+            <input type="text" id="specialty" name="specialty" required>
+
+            <label for="contact">Contact Details:</label>
+            <input type="text" id="contact" name="contact_details" required>
+
+            <label for="department">Department:</label>
+            <input type="text" id="department" name="department" required>
+
+            <label for="schedule">Schedule (e.g., Mon-Fri 9AM-5PM):</label>
+            <input type="text" id="schedule" name="schedule" required>
+
+            <button type="submit" class="submit-button">Update Doctor</button>
+        </form>
+    </section>
+
+    <script>
+        document.getElementById('doctorForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const doctorId = document.getElementById('doctorId').value;
+            const name = document.getElementById('name').value;
+            const specialty = document.getElementById('specialty').value;
+            const contact_details = document.getElementById('contact').value;
+            const department = document.getElementById('department').value;
+            const schedule = document.getElementById('schedule').value;
+
+            try {
+                const response = await fetch('/doctors', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ doctor_id: doctorId, name, specialty, contact_details, department, schedule })
+                });
+
+                const messageDiv = document.getElementById('message');
+                if (response.ok) {
+                    messageDiv.textContent = 'Doctor information updated successfully!';
+                    messageDiv.classList.add('success');
+                } else {
+                    messageDiv.textContent = 'Error: Unable to update doctor information.';
+                    messageDiv.classList.add('error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('message').textContent = 'An error occurred. Please try again later.';
+            }
+        });
+    </script>
+</body>
+</html>

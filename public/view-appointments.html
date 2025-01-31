@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Appointments</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>View Appointments</h1>
+    </header>
+    <section id="appointments-section">
+        <h2>All Appointments</h2>
+        <table id="appointments-table">
+            <thead>
+                <tr>
+                    <th>Appointment ID</th>
+                    <th>Patient ID</th>
+                    <th>Doctor ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Appointments data will be dynamically loaded here -->
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        // Fetch appointments data from the server
+        fetch('/appointments')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('appointments-table').querySelector('tbody');
+                data.forEach(appointment => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${appointment.appointment_id}</td>
+                        <td>${appointment.patient_id}</td>
+                        <td>${appointment.doctor_id}</td>
+                        <td>${appointment.date}</td>
+                        <td>${appointment.time}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching appointments:', error));
+    </script>
+</body>
+</html>
